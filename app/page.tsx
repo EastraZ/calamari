@@ -1,17 +1,22 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import Image from "next/image"
 import VideoBackground from "@/components/video-background"
 import Navbar from "@/components/navbar"
 import PageTransition from "@/components/page-transition"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import ScientistModelViewer from "@/components/scientist-model"
+import FloatingStats from "@/components/floating-stats"
+import { motion } from "framer-motion"
+import { Play, Rocket, Code, Sparkles, ChevronDown } from "lucide-react"
+import { useScroll, useTransform, AnimatePresence } from "framer-motion"
+import Footer from "@/components/footer"
+import UltimateFeatures from "@/components/ultimate-features"
+import MegaUltimateFeatures from "@/components/mega-ultimate-features"
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [selectedType, setSelectedType] = useState<string | null>(null)
-  const [selectedSubscription, setSelectedSubscription] = useState<string | null>(null)
-  const [selectedStatus, setSelectedStatus] = useState<string>("undetected")
+  const [showVideo, setShowVideo] = useState(false)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
   // Refs for scroll animations
   const featuresRef = useRef<HTMLElement>(null)
@@ -21,10 +26,10 @@ export default function Home() {
 
   // Scroll progress for parallax effects
   const { scrollYProgress } = useScroll()
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
 
   useEffect(() => {
-    // Simulate loading delay for entrance animation
     const timer = setTimeout(() => {
       setIsLoaded(true)
     }, 500)
@@ -32,9 +37,39 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Initialize SellSN when component mounts
+  // Enhanced testimonials
+  const testimonials = [
+    {
+      text: "Calamari completely revolutionized my gaming experience. The AI aimbot is incredibly accurate and feels natural!",
+      author: "ProGamer_2024",
+      game: "Rust",
+      rating: 5,
+    },
+    {
+      text: "Best investment I've made for Fortnite. The ESP and performance boost are game-changing!",
+      author: "BuildMaster",
+      game: "Fortnite",
+      rating: 5,
+    },
+    {
+      text: "Undetected for 8 months now. Amazing support team and constant updates!",
+      author: "ApexLegend",
+      game: "Apex Legends",
+      rating: 5,
+    },
+    {
+      text: "The neural network AI actually learns my playstyle. It's like having a personal gaming coach!",
+      author: "EliteSniper",
+      game: "Valorant",
+      rating: 5,
+    },
+  ]
+
   useEffect(() => {
-    // SellSN initialization code removed
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+    }, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleViewProduct = () => {
@@ -84,335 +119,224 @@ export default function Home() {
         <AnimatePresence>
           {isLoaded && (
             <motion.section
-              className="container mx-auto px-4 py-20 md:py-32 flex flex-col md:flex-row items-center relative z-20"
+              className="container mx-auto px-4 pt-16 pb-0 md:pt-24 md:pb-0 flex flex-col lg:flex-row items-center relative z-20 min-h-[90vh]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
+              style={{ y: heroY }}
             >
+              {/* Left side - Text content */}
               <motion.div
-                className="md:w-1/2 mb-8 md:mb-0"
+                className="lg:w-1/2 mb-8 lg:mb-0 lg:pr-12"
                 initial={{ x: -100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
+                {/* Animated badge */}
+                <motion.div
+                  className="inline-flex items-center bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 rounded-full px-4 py-2 mb-6"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Sparkles className="h-4 w-4 text-red-400 mr-2" />
+                  <span className="text-sm font-medium text-red-300">Now with AI-Enhanced Features</span>
+                </motion.div>
+
                 <motion.h1
-                  className="text-5xl md:text-7xl font-bold mb-6"
+                  className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                  <span className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
-                    Calamari -{" "}
+                  <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+                    Game
                   </span>
                   <br />
                   <motion.span
-                    className="bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 bg-clip-text text-transparent"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.6 }}
+                    className="bg-gradient-to-r from-red-500 via-orange-500 to-red-500 bg-clip-text text-transparent"
+                    animate={{
+                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                    }}
+                    transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                   >
-                    shine brighter
+                    Evolution
                   </motion.span>
                   <br />
-                  <motion.span
-                    className="bg-gradient-to-r from-gray-300 to-gray-100 bg-clip-text text-transparent"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.8 }}
-                  >
-                    than the rest
-                  </motion.span>
+                  <span className="bg-gradient-to-r from-gray-200 via-white to-gray-200 bg-clip-text text-transparent">
+                    Starts Here
+                  </span>
                 </motion.h1>
 
                 <motion.p
-                  className="text-gray-300 text-lg mb-8 max-w-xl"
+                  className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl leading-relaxed"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                >
+                  Experience the future of gaming with <span className="text-red-400 font-semibold">Calamari's</span>{" "}
+                  cutting-edge enhancement tools. Dominate every match with precision, style, and complete safety.
+                </motion.p>
+
+                {/* CTA Buttons */}
+                <motion.div
+                  className="flex flex-col sm:flex-row gap-4 mb-8"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 1.0 }}
                 >
-                  Gain a massive edge over your opponents and become unbeatable in the game! Customer support 24/7, for
-                  any questions or issues in Discord.
-                </motion.p>
+                  <motion.button
+                    onClick={handleViewProduct}
+                    className="group relative px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full font-bold text-lg overflow-hidden"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "0%" }}
+                      transition={{ duration: 0.3 }}
+                    />
+                    <span className="relative z-10 flex items-center">
+                      <Rocket className="mr-2 h-5 w-5" />
+                      Start Dominating
+                    </span>
+                  </motion.button>
 
-                <motion.p
-                  className="text-gray-300 text-lg mb-8"
+                  <motion.button
+                    onClick={() => setShowVideo(true)}
+                    className="group px-8 py-4 border-2 border-white/20 rounded-full font-bold text-lg hover:border-white/40 transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <span className="flex items-center">
+                      <Play className="mr-2 h-5 w-5" />
+                      Watch Demo
+                    </span>
+                  </motion.button>
+                </motion.div>
+
+                {/* Stats */}
+                <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 1.2 }}
                 >
-                  Get support, enter giveaways, and be the first to know about news.
-                </motion.p>
-
-                <motion.p
-                  className="text-xl"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 1.4 }}
-                >
-                  Welcome to Calamari!
-                </motion.p>
+                  <FloatingStats />
+                </motion.div>
               </motion.div>
 
+              {/* Right side - 3D Scientist Model - CENTERED PROPERLY */}
               <motion.div
-                className="md:w-1/2 mt-12 md:mt-0"
+                className="lg:w-1/2 h-[500px] flex items-center justify-center"
                 initial={{ x: 100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
               >
+                {/* Enhanced glowing background effect */}
                 <motion.div
-                  className="bg-[#0f0a0a]/80 backdrop-blur-sm rounded-lg border border-gray-800 p-6 max-w-md mx-auto"
-                  whileHover={{ boxShadow: "0 0 20px rgba(255, 0, 0, 0.3)" }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center">
-                      <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.2 }}>
-                        <Image
-                          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Calamari-diagonal-0MIPrqm68v07REXLgaOx76jFso80QO.png"
-                          alt="Calamari Logo"
-                          width={24}
-                          height={24}
-                          className="mr-2"
-                        />
-                      </motion.div>
-                      <span className="text-lg font-medium">Calamari</span>
-                    </div>
-                    <div className="flex space-x-2">
-                      <motion.button
-                        className="text-gray-400 hover:text-white"
-                        whileHover={{ y: -2 }}
-                        whileTap={{ y: 0 }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 15l7-7 7 7M5 9l7-7 7 7"
-                          />
-                        </svg>
-                      </motion.button>
-                      <motion.button
-                        className="text-gray-400 hover:text-white"
-                        whileHover={{ rotate: 90 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </motion.button>
-                    </div>
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-3xl blur-3xl"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.4, 0.7, 0.4],
+                  }}
+                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                />
+
+                {/* 3D Model Container - PROPERLY CENTERED */}
+                <div className="relative z-10 w-full h-full flex items-center justify-center">
+                  <div className="w-[400px] h-[400px] rounded-3xl overflow-hidden border-2 border-white/20 bg-black/50 shadow-2xl">
+                    <ScientistModelViewer />
                   </div>
+                </div>
 
-                  <motion.div
-                    className="mb-6"
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                  >
-                    <div className="flex items-center mb-2">
-                      <div className="text-lg font-medium">Hello, Guest!</div>
-                    </div>
-                    <div className="text-gray-400">Welcome to Calamari!</div>
-                  </motion.div>
+                {/* Enhanced Floating UI Elements - WITH SLIGHT BLUR */}
+                <motion.div
+                  className="absolute top-4 right-4 bg-black/80 backdrop-blur-sm border-2 border-green-400 rounded-xl px-4 py-3 shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.5 }}
+                  whileHover={{ scale: 1.05 }}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    backdropFilter: "blur(4px)",
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(34, 197, 94, 0.6)",
+                  }}
+                >
+                  <div className="flex items-center text-green-400">
+                    <div className="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse shadow-lg shadow-green-400/50" />
+                    <span className="text-sm font-bold">ONLINE</span>
+                  </div>
+                </motion.div>
 
-                  <motion.div
-                    className="mb-6"
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 1.0 }}
-                  >
-                    <div className="text-sm text-gray-400 mb-2">Type</div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedType === "external" ? "bg-gray-700 text-white" : "bg-[#0f0a0a] border border-gray-700"
-                        }`}
-                        onClick={() => {
-                          setSelectedType("external")
-                          setSelectedStatus("undetected")
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        External
-                      </motion.button>
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedType === "internal" ? "bg-gray-700 text-white" : "bg-[#0f0a0a] border border-gray-700"
-                        }`}
-                        onClick={() => {
-                          setSelectedType("internal")
-                          setSelectedStatus("down")
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Internal
-                      </motion.button>
-                    </div>
-                  </motion.div>
+                <motion.div
+                  className="absolute bottom-4 left-4 bg-black/80 backdrop-blur-sm border-2 border-blue-400 rounded-xl px-4 py-3 shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.7 }}
+                  whileHover={{ scale: 1.05 }}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    backdropFilter: "blur(4px)",
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(59, 130, 246, 0.6)",
+                  }}
+                >
+                  <div className="text-blue-400 text-sm font-bold flex items-center">
+                    <Code className="h-4 w-4 mr-2" />
+                    v4.0.1 ULTRA
+                  </div>
+                </motion.div>
 
-                  <motion.div
-                    className="mb-6"
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 1.2 }}
-                  >
-                    <div className="text-sm text-gray-400 mb-2">Subscription</div>
-                    <div className="grid grid-cols-3 gap-2">
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedSubscription === "3days"
-                            ? "bg-gray-700 text-white"
-                            : "bg-[#0f0a0a] border border-gray-700"
-                        }`}
-                        onClick={() => setSelectedSubscription("3days")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        3 days
-                      </motion.button>
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedSubscription === "7days"
-                            ? "bg-gray-700 text-white"
-                            : "bg-[#0f0a0a] border border-gray-700"
-                        }`}
-                        onClick={() => setSelectedSubscription("7days")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        7 days
-                      </motion.button>
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedSubscription === "30days"
-                            ? "bg-gray-700 text-white"
-                            : "bg-[#0f0a0a] border border-gray-700"
-                        }`}
-                        onClick={() => setSelectedSubscription("30days")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        30 days
-                      </motion.button>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="mb-6"
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 1.4 }}
-                  >
-                    <div className="text-sm text-gray-400 mb-2">Status</div>
-                    <div className="grid grid-cols-3 gap-2">
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedStatus === "undetected"
-                            ? "bg-green-600 text-white"
-                            : "bg-[#0f0a0a] border border-gray-700 text-green-500"
-                        }`}
-                        onClick={() => setSelectedStatus("undetected")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Undetected
-                      </motion.button>
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedStatus === "down"
-                            ? "bg-red-600 text-white"
-                            : "bg-[#0f0a0a] border border-gray-700 text-red-500"
-                        }`}
-                        onClick={() => setSelectedStatus("down")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Down
-                      </motion.button>
-                      <motion.button
-                        className={`py-2 rounded-md text-center ${
-                          selectedStatus === "detected"
-                            ? "bg-gray-600 text-white"
-                            : "bg-[#0f0a0a] border border-gray-700 text-gray-400"
-                        }`}
-                        onClick={() => setSelectedStatus("detected")}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Detected
-                      </motion.button>
-                    </div>
-                  </motion.div>
-
-                  <motion.button
-                    className="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 py-3 rounded-md transition-colors text-white font-medium"
-                    onClick={handleViewProduct}
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(255, 0, 0, 0.5)" }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ y: 10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 1.6 }}
-                    style={{ touchAction: "manipulation" }}
-                  >
-                    View Product
-                  </motion.button>
+                <motion.div
+                  className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm border-2 border-purple-400 rounded-xl px-4 py-3 shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    backdropFilter: "blur(4px)",
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(147, 51, 234, 0.6)",
+                  }}
+                >
+                  <div className="text-purple-400 text-sm font-bold">🚀 AI ACTIVE</div>
                 </motion.div>
               </motion.div>
             </motion.section>
           )}
         </AnimatePresence>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - MOVED UP TO REMOVE GAP */}
         <motion.div
-          className="flex justify-center mb-12 relative z-20"
+          className="flex justify-center mt-4 relative z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
+          onClick={() => {
+            const featuresSection = document.getElementById("features")
+            if (featuresSection) {
+              featuresSection.scrollIntoView({ behavior: "smooth" })
+            }
+          }}
         >
-          <motion.div
-            className="border-2 border-white/30 rounded-full h-12 w-6 flex items-start justify-center p-1"
-            animate={{
-              boxShadow: [
-                "0 0 0px rgba(255, 255, 255, 0.3)",
-                "0 0 10px rgba(255, 255, 255, 0.7)",
-                "0 0 0px rgba(255, 255, 255, 0.3)",
-              ],
-            }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          >
-            <motion.div
-              className="bg-white w-1 h-2 rounded-full"
-              animate={{ y: [0, 10, 0] }}
+          <motion.div className="flex flex-col items-center cursor-pointer" whileHover={{ scale: 1.1 }}>
+            <motion.span
+              className="text-gray-400 text-sm mb-2"
+              animate={{ y: [0, 5, 0] }}
               transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
-            />
-          </motion.div>
-          <motion.div
-            className="absolute mt-14 text-sm text-gray-400"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          >
-            Scroll
+            >
+              Scroll to explore
+            </motion.span>
+            <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
+              <ChevronDown className="h-6 w-6 text-red-400" />
+            </motion.div>
           </motion.div>
         </motion.div>
 
-        {/* Features Section */}
+        {/* MEGA ULTIMATE Features Section - NEW! */}
         <motion.section
-          className="container mx-auto px-4 py-20"
+          className="relative z-20 mt-8"
           id="features"
           ref={featuresRef}
           initial="hidden"
@@ -420,145 +344,112 @@ export default function Home() {
           viewport={{ once: true, amount: 0.2 }}
           variants={containerVariants}
         >
+          <MegaUltimateFeatures />
+        </motion.section>
+
+        {/* ULTIMATE Features Section */}
+        <motion.section
+          className="relative z-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={containerVariants}
+        >
+          <UltimateFeatures />
+        </motion.section>
+
+        {/* Enhanced Testimonials Section */}
+        <motion.section
+          className="container mx-auto px-4 py-20 relative z-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={containerVariants}
+        >
           <motion.div className="text-center mb-16" variants={itemVariants}>
-            <motion.h2
-              className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent"
-              whileInView={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            >
-              Premium Features
-            </motion.h2>
-            <motion.p className="text-gray-300 max-w-2xl mx-auto" variants={itemVariants}>
-              Calamari offers the most advanced features to give you the competitive edge in your favorite games.
-            </motion.p>
+            <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
+              Trusted by Elite Gamers Worldwide
+            </h2>
+            <p className="text-gray-300 max-w-2xl mx-auto text-xl">
+              Join over 1 million players who've elevated their game with Calamari
+            </p>
           </motion.div>
 
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8" variants={containerVariants}>
-            <motion.div
-              className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6 hover:border-white/30 transition-all duration-300"
-              variants={itemVariants}
-              whileHover={{ y: -10, boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.3)" }}
-            >
+          <motion.div className="max-w-5xl mx-auto" variants={itemVariants}>
+            <AnimatePresence mode="wait">
               <motion.div
-                className="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.8 }}
+                key={currentTestimonial}
+                className="bg-black border border-white/20 rounded-3xl p-10 text-center relative overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </motion.div>
-              <motion.h3
-                className="text-xl font-bold mb-2"
-                whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-              >
-                Advanced Aimbot
-              </motion.h3>
-              <motion.p className="text-gray-300" variants={itemVariants}>
-                Our precision aimbot features customizable FOV, target selection, and smooth aiming for a natural feel.
-              </motion.p>
-            </motion.div>
+                {/* Background glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-3xl" />
 
-            <motion.div
-              className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6 hover:border-white/30 transition-all duration-300"
-              variants={itemVariants}
-              whileHover={{ y: -10, boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.3)" }}
-            >
-              <motion.div
-                className="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.8 }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                <motion.p
+                  className="text-2xl md:text-3xl text-gray-200 mb-8 italic relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              </motion.div>
-              <motion.h3
-                className="text-xl font-bold mb-2"
-                whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse", delay: 0.5 }}
-              >
-                ESP & Wallhack
-              </motion.h3>
-              <motion.p className="text-gray-300" variants={itemVariants}>
-                See enemies through walls with customizable ESP features including boxes, skeletons, health bars, and
-                more.
-              </motion.p>
-            </motion.div>
+                  "{testimonials[currentTestimonial].text}"
+                </motion.p>
 
-            <motion.div
-              className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6 hover:border-white/30 transition-all duration-300"
-              variants={itemVariants}
-              whileHover={{ y: -10, boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.3)" }}
-            >
-              <motion.div
-                className="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mb-4"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.8 }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                {/* Star rating */}
+                <motion.div
+                  className="flex justify-center mb-6 relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
+                  {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                    <motion.span
+                      key={i}
+                      className="text-yellow-400 text-2xl"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.4 + i * 0.1 }}
+                    >
+                      ⭐
+                    </motion.span>
+                  ))}
+                </motion.div>
+
+                <motion.div
+                  className="flex items-center justify-center space-x-4 relative z-10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <div className="text-red-400 font-bold text-lg">{testimonials[currentTestimonial].author}</div>
+                  <div className="w-2 h-2 bg-gray-500 rounded-full" />
+                  <div className="text-gray-400 font-medium">{testimonials[currentTestimonial].game}</div>
+                </motion.div>
               </motion.div>
-              <motion.h3
-                className="text-xl font-bold mb-2"
-                whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse", delay: 1 }}
-              >
-                Undetected Technology
-              </motion.h3>
-              <motion.p className="text-gray-300" variants={itemVariants}>
-                Our advanced anti-detection system keeps you safe from bans with regular updates and security features.
-              </motion.p>
-            </motion.div>
+            </AnimatePresence>
+
+            {/* Enhanced testimonial indicators */}
+            <div className="flex justify-center mt-8 space-x-3">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                    index === currentTestimonial
+                      ? "bg-red-500 scale-125 shadow-lg shadow-red-500/50"
+                      : "bg-gray-600 hover:bg-gray-500"
+                  }`}
+                />
+              ))}
+            </div>
           </motion.div>
         </motion.section>
 
-        {/* Pricing Section */}
+        {/* Enhanced Pricing Section with SellAuth Embeds */}
         <motion.section
-          className="container mx-auto px-4 py-20 bg-[#0f0a0a]/30"
+          className="container mx-auto px-4 py-20 bg-gradient-to-br from-[#0f0a0a]/50 to-transparent relative z-20"
           id="subscription-plans"
           ref={pricingRef}
           initial="hidden"
@@ -568,407 +459,396 @@ export default function Home() {
         >
           <motion.div className="text-center mb-16" variants={itemVariants}>
             <motion.h2
-              className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent"
+              className="text-4xl md:text-6xl font-bold mb-6"
               whileInView={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
               transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
             >
-              Subscription Plans
+              <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+                Choose Your
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-red-500 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                Power Level
+              </span>
             </motion.h2>
-            <motion.p className="text-gray-300 max-w-2xl mx-auto" variants={itemVariants}>
-              Choose the perfect plan for your gaming needs. All subscriptions include full access to features and 24/7
-              support.
+            <motion.p className="text-xl text-gray-300 max-w-3xl mx-auto" variants={itemVariants}>
+              Every plan includes full access to all features, 24/7 support, and our undetected guarantee. Start your
+              journey to gaming supremacy today.
             </motion.p>
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
             variants={containerVariants}
           >
             {/* 1 Day Plan */}
             <motion.div
-              className="bg-[#0f0a0a]/80 backdrop-blur-sm border border-gray-800 rounded-md p-6 h-full flex flex-col justify-between"
+              className="relative bg-black border border-gray-700 rounded-2xl p-6 h-full flex flex-col justify-between group"
               variants={itemVariants}
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.3)",
+                boxShadow: "0 20px 40px -10px rgba(255, 0, 0, 0.3)",
                 borderColor: "rgba(255, 255, 255, 0.3)",
               }}
             >
-              <div className="text-center mb-6">
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-                >
-                  1 Day
-                </motion.h3>
-                <div className="text-3xl font-bold text-white mb-2">$6.99</div>
-                <p className="text-gray-400">Perfect for a quick test</p>
+              <div>
+                <div className="text-center mb-6">
+                  <motion.h3 className="text-2xl font-bold mb-2 text-white" whileHover={{ color: "#ff3333" }}>
+                    Trial Run
+                  </motion.h3>
+                  <div className="text-4xl font-bold text-white mb-2">$6.99</div>
+                  <p className="text-gray-400">1 Day Access</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    All premium features
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    24/7 support
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Instant activation
+                  </li>
+                </ul>
               </div>
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Full access to all features</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">24/7 support</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Regular updates</span>
-                </li>
-              </ul>
-              {/* SellSN Button with data attributes */}
-              <a
-                href="https://calamari.sellsn.io/group/bdaf8b4e-38dd-48d3-999e-de03f5df3dc2?p=f67c6c86-b0b6-4a4e-852b-3f1ebbf51b05"
+
+              {/* Buy Button */}
+              <motion.a
+                href="https://calamari.sellauth.com/product/1day"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-white/10 hover:bg-white/20 py-2 rounded-md text-center text-white cursor-pointer inline-block"
+                className="w-full bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 py-3 rounded-xl text-center text-white font-medium transition-all duration-300 block"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Purchase Now
-              </a>
+                Get Started
+              </motion.a>
             </motion.div>
 
-            {/* 7 Days Plan */}
+            {/* 7 Days Plan - Most Popular */}
             <motion.div
-              className="bg-[#0f0a0a]/80 backdrop-blur-sm border border-white/20 rounded-md p-6 relative h-full flex flex-col justify-between"
+              className="relative bg-black border-2 border-red-500 rounded-2xl p-6 h-full flex flex-col justify-between group"
               variants={itemVariants}
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.5)",
-                borderColor: "rgba(255, 0, 0, 0.5)",
+                boxShadow: "0 20px 40px -10px rgba(255, 0, 0, 0.5)",
               }}
             >
               <motion.div
-                className="absolute -top-3 left-0 right-0 flex justify-center"
+                className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm font-bold px-4 py-2 rounded-full"
                 initial={{ y: -10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <motion.div
-                  className="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full"
-                  animate={{
-                    boxShadow: [
-                      "0 0 0px rgba(255, 0, 0, 0)",
-                      "0 0 10px rgba(255, 0, 0, 0.7)",
-                      "0 0 0px rgba(255, 0, 0, 0)",
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                >
-                  MOST POPULAR
-                </motion.div>
+                MOST POPULAR
               </motion.div>
-              <div className="text-center mb-6">
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-                >
-                  7 Days
-                </motion.h3>
-                <div className="text-3xl font-bold text-white mb-2">$24.99</div>
-                <p className="text-gray-400">Best value for regular players</p>
+              <div>
+                <div className="text-center mb-6 mt-4">
+                  <motion.h3
+                    className="text-2xl font-bold mb-2 text-white"
+                    animate={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                  >
+                    Power User
+                  </motion.h3>
+                  <div className="text-4xl font-bold text-white mb-2">$24.99</div>
+                  <p className="text-red-200">7 Days Access</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-red-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    All premium features
+                  </li>
+                  <li className="flex items-center text-red-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Priority support
+                  </li>
+                  <li className="flex items-center text-red-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Pro player configs
+                  </li>
+                  <li className="flex items-center text-red-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Best value
+                  </li>
+                </ul>
               </div>
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Full access to all features</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">24/7 priority support</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Regular updates</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Config saving</span>
-                </li>
-              </ul>
-              <a
-                href="https://calamari.sellsn.io/group/bdaf8b4e-38dd-48d3-999e-de03f5df3dc2?p=f67c6c86-b0b6-4a4e-852b-3f1ebbf51b05"
+
+              {/* Buy Button */}
+              <motion.a
+                href="https://calamari.sellauth.com/product/7day"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-white/10 hover:bg-white/20 py-2 rounded-md text-center text-white"
+                className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 py-3 rounded-xl text-center text-white font-medium transition-all duration-300 block"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Purchase Now
-              </a>
+                Choose Plan
+              </motion.a>
             </motion.div>
 
             {/* 30 Days Plan */}
             <motion.div
-              className="bg-[#0f0a0a]/80 backdrop-blur-sm border border-gray-800 rounded-md p-6 h-full flex flex-col justify-between"
+              className="relative bg-black border border-gray-700 rounded-2xl p-6 h-full flex flex-col justify-between group"
               variants={itemVariants}
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.3)",
+                boxShadow: "0 20px 40px -10px rgba(255, 0, 0, 0.3)",
                 borderColor: "rgba(255, 255, 255, 0.3)",
               }}
             >
-              <div className="text-center mb-6">
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-                >
-                  30 Days
-                </motion.h3>
-                <div className="text-3xl font-bold text-white mb-2">$59.99</div>
-                <p className="text-gray-400">For dedicated gamers</p>
+              <div>
+                <div className="text-center mb-6">
+                  <motion.h3 className="text-2xl font-bold mb-2 text-white" whileHover={{ color: "#ff3333" }}>
+                    Elite Gamer
+                  </motion.h3>
+                  <div className="text-4xl font-bold text-white mb-2">$79.99</div>
+                  <p className="text-gray-400">30 Days Access</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    All premium features
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    VIP support
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Custom configs
+                  </li>
+                  <li className="flex items-center text-gray-300">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Beta access
+                  </li>
+                </ul>
               </div>
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Full access to all features</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">24/7 VIP support</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Priority updates</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Beta feature access</span>
-                </li>
-              </ul>
-              <a
-                href="https://calamari.sellsn.io/group/bdaf8b4e-38dd-48d3-999e-de03f5df3dc2?p=f67c6c86-b0b6-4a4e-852b-3f1ebbf51b05"
+
+              {/* Buy Button */}
+              <motion.a
+                href="https://calamari.sellauth.com/product/30day"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-white/10 hover:bg-white/20 py-2 rounded-md text-center text-white"
+                className="w-full bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 py-3 rounded-xl text-center text-white font-medium transition-all duration-300 block"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Purchase Now
-              </a>
+                Go Elite
+              </motion.a>
             </motion.div>
 
             {/* Lifetime Plan */}
             <motion.div
-              className="bg-[#0f0a0a]/80 backdrop-blur-sm border border-gray-800 rounded-md p-6 h-full flex flex-col justify-between"
+              className="relative bg-black border border-yellow-500 rounded-2xl p-6 h-full flex flex-col justify-between group"
               variants={itemVariants}
               whileHover={{
                 scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(255, 0, 0, 0.3)",
-                borderColor: "rgba(255, 255, 255, 0.3)",
+                boxShadow: "0 20px 40px -10px rgba(255, 215, 0, 0.5)",
               }}
             >
-              <div className="text-center mb-6">
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-                >
-                  Lifetime
-                </motion.h3>
-                <div className="text-3xl font-bold text-white mb-2">$299.99</div>
-                <p className="text-gray-400">Ultimate commitment</p>
+              <motion.div
+                className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-sm font-bold px-4 py-2 rounded-full"
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
+                BEST VALUE
+              </motion.div>
+              <div>
+                <div className="text-center mb-6 mt-4">
+                  <motion.h3
+                    className="text-2xl font-bold mb-2 text-white"
+                    animate={{ color: ["#ffffff", "#ffd700", "#ffffff"] }}
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                  >
+                    Legend
+                  </motion.h3>
+                  <div className="text-4xl font-bold text-white mb-2">$199.99</div>
+                  <p className="text-yellow-200">Lifetime Access</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-yellow-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    All premium features
+                  </li>
+                  <li className="flex items-center text-yellow-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Lifetime updates
+                  </li>
+                  <li className="flex items-center text-yellow-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Exclusive features
+                  </li>
+                  <li className="flex items-center text-yellow-100">
+                    <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    Legend status
+                  </li>
+                </ul>
               </div>
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Permanent access</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Premium VIP support</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Early access to new features</span>
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-gray-300">Exclusive Discord role</span>
-                </li>
-              </ul>
-              <a
-                href="https://calamari.sellsn.io/group/bdaf8b4e-38dd-48d3-999e-de03f5df3dc2?p=f67c6c86-b0b6-4a4e-852b-3f1ebbf51b05"
+
+              {/* Buy Button */}
+              <motion.a
+                href="https://calamari.sellauth.com/product/lifetime"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-white/10 hover:bg-white/20 py-2 rounded-md text-center text-white"
+                className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 py-3 rounded-xl text-center text-black font-medium transition-all duration-300 block"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Purchase Now
-              </a>
+                Become Legend
+              </motion.a>
             </motion.div>
+          </motion.div>
+
+          {/* Money-back guarantee */}
+          <motion.div
+            className="text-center mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="inline-flex items-center bg-green-500/20 border border-green-500/30 rounded-full px-6 py-3">
+              <svg className="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="text-green-300 font-medium">30-day money-back guarantee on all plans</span>
+            </div>
           </motion.div>
         </motion.section>
 
-        {/* FAQ Section */}
+        {/* Enhanced FAQ Section */}
         <motion.section
-          className="container mx-auto px-4 py-20"
+          className="container mx-auto px-4 py-20 relative z-20"
           ref={faqRef}
           initial="hidden"
           whileInView="visible"
@@ -976,122 +856,63 @@ export default function Home() {
           variants={containerVariants}
         >
           <motion.div className="text-center mb-16" variants={itemVariants}>
-            <motion.h2
-              className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent"
-              whileInView={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               Frequently Asked Questions
-            </motion.h2>
-            <motion.p className="text-gray-300 max-w-2xl mx-auto" variants={itemVariants}>
-              Find answers to the most common questions about Calamari.
-            </motion.p>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Everything you need to know about Calamari and our gaming enhancement tools
+            </p>
           </motion.div>
 
-          <motion.div className="max-w-3xl mx-auto" variants={containerVariants}>
-            <motion.div className="mb-6" variants={itemVariants} whileHover={{ scale: 1.02 }}>
+          <motion.div className="max-w-4xl mx-auto space-y-6" variants={containerVariants}>
+            {[
+              {
+                question: "Is Calamari safe and undetected?",
+                answer:
+                  "Yes! Calamari uses advanced stealth technology and has maintained a 100% undetected rate since 2023. Our team constantly updates the software to stay ahead of anti-cheat systems.",
+              },
+              {
+                question: "Which games does Calamari support?",
+                answer:
+                  "Calamari supports 30+ popular games including Rust, Fortnite, Apex Legends, CS:GO, Valorant, Call of Duty, PUBG, and many more. We regularly add support for new games.",
+              },
+              {
+                question: "How quickly can I start using Calamari?",
+                answer:
+                  "Activation is instant! After purchase, you'll receive your license key immediately and can start using Calamari within seconds. Our injection technology activates in under 1 second.",
+              },
+              {
+                question: "What kind of support do you offer?",
+                answer:
+                  "We provide 24/7 expert support through Discord, live chat, and email. Our team of gaming experts is always ready to help you optimize your experience and resolve any issues.",
+              },
+              {
+                question: "Can I use Calamari on multiple devices?",
+                answer:
+                  "Each license is tied to one device for security reasons. However, you can easily transfer your license to a new device through our support team if needed.",
+              },
+              {
+                question: "Do you offer refunds?",
+                answer:
+                  "Yes! We offer a 30-day money-back guarantee on all plans. If you're not completely satisfied with Calamari, we'll provide a full refund, no questions asked.",
+              },
+            ].map((faq, index) => (
               <motion.div
-                className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6"
-                whileHover={{ borderColor: "rgba(255, 0, 0, 0.5)", boxShadow: "0 0 15px rgba(255, 0, 0, 0.2)" }}
+                key={index}
+                className="bg-black border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-colors"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
               >
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-                >
-                  Is Calamari safe to use?
-                </motion.h3>
-                <motion.p
-                  className="text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  Yes, Calamari is designed with advanced anti-detection technology to keep your account safe. We
-                  regularly update our software to stay ahead of anti-cheat systems.
-                </motion.p>
+                <h3 className="text-xl font-bold text-white mb-3">{faq.question}</h3>
+                <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
               </motion.div>
-            </motion.div>
-
-            <motion.div className="mb-6" variants={itemVariants} whileHover={{ scale: 1.02 }}>
-              <motion.div
-                className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6"
-                whileHover={{ borderColor: "rgba(255, 0, 0, 0.5)", boxShadow: "0 0 15px rgba(255, 0, 0, 0.2)" }}
-              >
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse", delay: 0.5 }}
-                >
-                  How do I get started with Calamari?
-                </motion.h3>
-                <motion.p
-                  className="text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  After purchasing a subscription, you'll receive download instructions via email. Our launcher makes
-                  installation simple, and our 24/7 support team is available if you need any assistance.
-                </motion.p>
-              </motion.div>
-            </motion.div>
-
-            <motion.div className="mb-6" variants={itemVariants} whileHover={{ scale: 1.02 }}>
-              <motion.div
-                className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6"
-                whileHover={{ borderColor: "rgba(255, 0, 0, 0.5)", boxShadow: "0 0 15px rgba(255, 0, 0, 0.2)" }}
-              >
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse", delay: 1 }}
-                >
-                  What games does Calamari support?
-                </motion.h3>
-                <motion.p
-                  className="text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  Calamari currently supports Rust, Fortnite, and Apex Legends. We're constantly working on adding
-                  support for more games based on user demand.
-                </motion.p>
-              </motion.div>
-            </motion.div>
-
-            <motion.div className="mb-6" variants={itemVariants} whileHover={{ scale: 1.02 }}>
-              <motion.div
-                className="bg-[#0f0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg p-6"
-                whileHover={{ borderColor: "rgba(255, 0, 0, 0.5)", boxShadow: "0 0 15px rgba(255, 0, 0, 0.2)" }}
-              >
-                <motion.h3
-                  className="text-xl font-bold mb-2"
-                  whileInView={{ color: ["#ffffff", "#ff3333", "#ffffff"] }}
-                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse", delay: 1.5 }}
-                >
-                  Do you offer refunds?
-                </motion.h3>
-                <motion.p
-                  className="text-gray-300"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  We offer refunds within 24 hours of purchase if the product doesn't work as advertised. Please contact
-                  our support team through Discord for assistance with refund requests.
-                </motion.p>
-              </motion.div>
-            </motion.div>
+            ))}
           </motion.div>
         </motion.section>
 
-        {/* Discord CTA */}
+        {/* Enhanced Discord CTA */}
         <motion.section
-          className="container mx-auto px-4 py-16"
+          className="container mx-auto px-4 py-20 relative z-20"
           ref={discordRef}
           initial="hidden"
           whileInView="visible"
@@ -1099,47 +920,108 @@ export default function Home() {
           variants={containerVariants}
         >
           <motion.div
-            className="max-w-4xl mx-auto bg-[#0f0a0a]/80 backdrop-blur-sm border border-gray-800 rounded-md p-8 text-center"
+            className="bg-gradient-to-r from-[#5865F2]/20 to-[#7289DA]/20 border border-[#5865F2]/30 rounded-3xl p-12 text-center relative overflow-hidden"
             variants={itemVariants}
-            whileHover={{
-              boxShadow: "0 0 30px rgba(255, 0, 0, 0.3)",
-              borderColor: "rgba(255, 255, 255, 0.3)",
-            }}
           >
-            <motion.h2
-              className="text-3xl font-bold mb-4 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent"
-              whileInView={{
+            {/* Background animation */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-[#5865F2]/10 to-[#7289DA]/10"
+              animate={{
                 backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
               }}
-              transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            >
-              Join Our Discord Community
-            </motion.h2>
-            <motion.p className="text-gray-300 mb-6 max-w-2xl mx-auto" variants={itemVariants}>
-              Get support, enter giveaways, and be the first to know about updates and special offers.
-            </motion.p>
-            <motion.a
-              href="https://discord.gg/calamari"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center bg-[#5865F2] hover:bg-[#4752C4] px-6 py-3 rounded-md font-medium transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="mr-2 flex-shrink-0"
+              transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            />
+
+            <motion.div className="relative z-10" variants={itemVariants}>
+              <motion.h2
+                className="text-4xl md:text-6xl font-bold mb-6"
+                animate={{
+                  backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+                }}
+                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
               >
-                <path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09-.01-.02-.04-.03-.07-.03-1.5.26-2.93.71-4.27 1.33-.01 0-.02.01-.03.02-2.72 4.07-3.47 8.03-3.1 11.95 0 .02.01.04.03.05 1.8 1.32 3.53 2.12 5.24 2.65.03.01.06 0 .07-.02.4-.55.76-1.13 1.07-1.74.02-.04 0-.08-.04-.09-.57-.22-1.11-.48-1.64-.78-.04-.02-.04-.08-.01-.11.11-.08.22-.17.33-.25.02-.02.05-.02.07-.01 3.44 1.57 7.15 1.57 10.55 0 .02-.01.05-.01.07.01.11.09.22.17.33.26.04.03.04.09-.01.11-.52.31-1.07.56-1.64.78-.04.01-.05.06-.04.09.32.61.68 1.19 1.07 1.74.03.02.06.03.09.02 1.72-.53 3.45-1.33 5.25-2.65.02-.01.03-.03.03-.05.44-4.53-.73-8.46-3.1-11.95-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.83 2.12-1.89 2.12z" />
-              </svg>
-              Join Discord
-            </motion.a>
+                <span className="bg-gradient-to-r from-[#5865F2] via-[#7289DA] to-[#5865F2] bg-clip-text text-transparent">
+                  Join Our Elite Community
+                </span>
+              </motion.h2>
+
+              <motion.p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto" variants={itemVariants}>
+                Connect with over 50,000 elite gamers, get exclusive tips, early access to features, and 24/7 support
+                from our expert team.
+              </motion.p>
+
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                variants={itemVariants}
+              >
+                <motion.a
+                  href="https://discord.gg/calamari"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group px-8 py-4 bg-[#5865F2] hover:bg-[#4752C4] rounded-full font-bold text-lg transition-all duration-300 flex items-center"
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 30px -10px rgba(88, 101, 242, 0.4)" }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg className="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                  </svg>
+                  Join Discord
+                </motion.a>
+
+                <motion.div className="flex items-center text-gray-400" variants={itemVariants}>
+                  <div className="flex -space-x-2 mr-3">
+                    {[...Array(4)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full border-2 border-black"
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm">50,000+ active members</span>
+                </motion.div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </motion.section>
+
+        {/* Footer */}
+        <Footer />
+
+        {/* Video Modal */}
+        <AnimatePresence>
+          {showVideo && (
+            <motion.div
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowVideo(false)}
+            >
+              <motion.div
+                className="bg-black rounded-2xl overflow-hidden max-w-4xl w-full aspect-video relative"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setShowVideo(false)}
+                  className="absolute top-4 right-4 text-white hover:text-red-400 z-10"
+                >
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <iframe
+                  src="https://www.youtube.com/embed/Zyb4ocZlJyQ?autoplay=1"
+                  className="w-full h-full"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
     </PageTransition>
   )

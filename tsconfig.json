@@ -18,12 +18,8 @@
         "name": "next"
       }
     ],
-    // Add baseUrl and more specific paths for your imports
-    "baseUrl": ".",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/app/*":        ["app/*"],
-      "@/*":            ["./*"]
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
