@@ -1,8 +1,11 @@
 "use client"
 
 import type React from "react"
+
+import { Inter } from "next/font/google"
 import "./globals.css"
-import { AnimatePresence } from "framer-motion"
+
+const inter = Inter({ subsets: ["latin"] })
 
 export default function ClientLayout({
   children,
@@ -10,23 +13,8 @@ export default function ClientLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body>
-        <div id="page-transition"></div>
-        <AnimatePresence mode="wait">{children}</AnimatePresence>
-        {/* SellSN script removed */}
-      </body>
+    <html lang="en" className="dark">
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }

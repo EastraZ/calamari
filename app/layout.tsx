@@ -3,15 +3,16 @@ import type { Metadata } from "next"
 import ClientLayout from "./ClientLayout"
 
 export const metadata: Metadata = {
-  title: "Calamari | Premium Game Enhancement Tools",
+  title: "BlueWing | Premium Gaming Enhancement Tools",
   description:
-    "Calamari offers undetected premium game enhancement tools for Rust, Fortnite, Apex Legends and more. Gain a massive edge over your opponents and become unbeatable in the game!",
+    "BlueWing offers undetected premium gaming enhancement tools for Rust, Valorant, Rainbow Six Siege, Fortnite and more. Dominate every match with precision and style!",
   keywords: [
-    "calamari",
+    "bluewing",
     "game enhancement",
     "rust cheats",
+    "valorant cheats",
+    "r6 siege cheats",
     "fortnite cheats",
-    "apex legends cheats",
     "undetected cheats",
     "aimbot",
     "esp",
