@@ -18,6 +18,11 @@ export const metadata: Metadata = {
     "esp",
     "wallhack",
   ],
+  icons: {
+    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bwfooter-KTdG54jxHF96VUc7Bs40vJqsgJc8mh.png",
+    shortcut: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bwfooter-KTdG54jxHF96VUc7Bs40vJqsgJc8mh.png",
+    apple: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bwfooter-KTdG54jxHF96VUc7Bs40vJqsgJc8mh.png",
+  },
     generator: 'v0.dev'
 }
 
